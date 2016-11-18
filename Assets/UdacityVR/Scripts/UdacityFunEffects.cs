@@ -19,6 +19,8 @@ public class UdacityFunEffects : MonoBehaviour {
     private GameObject activeShape;
     private bool isSunUp = true;
 
+    [SerializeField]
+    private Gradient colorOverLifeTiime;
     public GameObject[] cubes;
 
     // Use this for initialization
@@ -31,6 +33,28 @@ public class UdacityFunEffects : MonoBehaviour {
             activeShape = sphere.gameObject;
 	}
 
+
+    public void setParticleCollision()
+    {
+        ParticleSystem ps;
+
+        if (cube.gameObject.activeInHierarchy)
+            ps = cube.GetComponent<ParticleSystem>();
+        else ps = sphere.GetComponent<ParticleSystem>();
+
+        ps.gravityModifier = 1;
+
+        ParticleSystem.ColorOverLifetimeModule colorOverLT = ps.colorOverLifetime;
+        colorOverLT.enabled = true;
+        colorOverLT.color = colorOverLifeTiime;
+
+        ParticleSystem.CollisionModule col = ps.collision;
+        col.enabled = true;
+        col.dampen = 0.2f;
+        col.bounce = 1;
+
+        ps.Clear();
+    }
 
     public void ChangeParticleColor()
     {
